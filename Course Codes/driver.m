@@ -39,7 +39,7 @@ F = zeros(n_eq, 1);    % allocate the global load vector
 % Assembly of K and F
 for ee = 1 : n_el
 
-    k_e = zeros(2,2);
+    k_e = zeros(2,2); %2*2 k matrix
     f_e = zeros(2,1);
 
     x_ele = zeros(2,1);
