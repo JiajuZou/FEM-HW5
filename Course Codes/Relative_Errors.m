@@ -3,6 +3,8 @@ clear all; clc;
 
 % exact solution
 exact = @(x) sin(x);
+% 创建一个空的表格
+resultTable = table();
 
 for n_el = 2:2:16 % generate different mesh
     hh = 1 / n_el;
@@ -46,13 +48,21 @@ for n_el = 2:2:16 % generate different mesh
                 u = exact(x_l);
             end
         
-        Error = Error + weight(l) * (u_h - u)^2 * dx_dxi;
+            Error = Error + weight(l) * (u_h - u)^2 * dx_dxi;
+            
         end    
     end
-
-    plot(log(hh),log(Error),'o');
+    
+    %Store the results into one table and plot them
+    resultTable = [resultTable; table(hh, Error)];
+    plot(log10(resultTable.hh),log10(resultTable.Error),'o-');
     hold on
+    xlabel('lg(hh)');
+    ylabel('lg(Error)');
+    title('Plot of Error vs. Mesh Size');
 end
+
+
 
 
 
