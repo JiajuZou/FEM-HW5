@@ -49,6 +49,7 @@ for n_el = 2:2:16 % generate different mesh
             end
         
             Error = Error + weight(l) * (u_h - u)^2 * dx_dxi;
+            %还没除以分母
             
         end    
     end
