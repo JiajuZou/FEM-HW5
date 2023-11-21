@@ -10,8 +10,9 @@ exact_dx_square = @(x) cos(x).^2;
 result_L2_down = sqrt(integral(exact_square, 0, 1)); %分母部分
 result_H1_down = sqrt(integral(exact_dx_square, 0, 1)); %分母部分
 
-% creat a table to store the results
-resultTable = table();
+% creat two tables to store the results
+resultTable_L2 = table();
+resultTable_H1 = table();
 
 for n_el = 2:2:16 % generate different mesh
     hh = 1 / n_el;
@@ -58,17 +59,17 @@ for n_el = 2:2:16 % generate different mesh
         end
         
         Error_L2 = Error_L2 + AA;
-        
     end
     
     Error_Final_L2 = Error_L2^0.5 / result_L2_down;
     %Store the results into the table and plot them
-    resultTable = [resultTable; table(hh, Error_Final_L2)];
-    plot(log10(resultTable.hh),log10(resultTable.Error_Final_L2),'o-');
+    resultTable_L2 = [resultTable_L2; table(hh, Error_Final_L2)];
+    plot(log10(resultTable_L2.hh),log10(resultTable_L2.Error_Final_L2),'o-');
     hold on
     xlabel('lg(hh)');
-    ylabel('lg(Error)');
-    title('Plot of Error vs. Mesh Size');
+    ylabel('lg(Error L2)');
+    title('Plot of Error L2 vs. Mesh Size');
+
 end
 
 
