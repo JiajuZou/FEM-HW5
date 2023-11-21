@@ -3,12 +3,10 @@ clear all; clc;
 
 % exact solution
 exact = @(x) sin(x);
-exact_square = @(x) sin(x).^2;
 exact_dx = @(x) cos(x);
-exact_dx_square = @(x) cos(x).^2;
 % integral the exact solution and its derivitive
-result_L2_down = sqrt(integral(exact_square, 0, 1)); %分母部分
-result_H1_down = sqrt(integral(exact_dx_square, 0, 1)); %分母部分
+result_L2_down = sqrt(integral(exact^2, 0, 1)); %分母部分
+result_H1_down = sqrt(integral(exact_dx^2, 0, 1))^0.5; %分母部分
 
 % creat a table to store the results
 resultTable = table();
@@ -34,37 +32,38 @@ for n_el = 2:2:16 % generate different mesh
     % generate the quadrature rule to caculate the integral of one element
     n_int = 30;
     [xi, weight] = Gauss(n_int, -1, 1);
-    
-    Error_L2 = 0.0;
+
     for ee = 1 : n_el
-        
         x_ele = zeros(2,1); % one element with two points
+        
         for aa = 1 : 2
             x_ele(aa) = x_coor(IEN(aa,ee)); % A = IEN(a,e)
         end
+        
        
-        AA = 0.0; 
         for l = 1 : n_int
-            u_h = 0.0;
-            x_l = 0.0;
             dx_dxi = 0.0;
+            x_l = 0.0;
+            u_h = 0.0;
+            u = 0.0;
+            Error = 0.0; 
             for aa = 1 : 2
-                u_h = u_h + exact(x_ele(aa)) * PolyShape(aa, xi(aa), 0);
-                x_l = x_l + x_ele(aa) * PolyShape(aa, xi(l), 0);
                 dx_dxi = dx_dxi + x_ele(aa) * PolyShape(aa, xi(l), 1);
+                x_l = x_l + x_ele(aa) * PolyShape(aa, xi(l), 0);
+                u_h = u_h + exact(x_ele(aa)) * PolyShape(aa, xi(aa), 0);
+                u = exact(x_l);
             end
-            u_exact = exact(x_l);
-            AA = AA + weight(l) * (u_h - u_exact)^2 * dx_dxi;
+            Error = Error + (weight(l) * (u_h - u)^2 * dx_dxi) / result_L2_down;
         end
         
-        Error_L2 = Error_L2 + AA;
+        
+        
         
     end
     
-    Error_Final_L2 = Error_L2^0.5 / result_L2_down;
     %Store the results into the table and plot them
-    resultTable = [resultTable; table(hh, Error_Final_L2)];
-    plot(log10(resultTable.hh),log10(resultTable.Error_Final_L2),'o-');
+    resultTable = [resultTable; table(hh, Error)];
+    plot(log10(resultTable.hh),log10(resultTable.Error),'o-');
     hold on
     xlabel('lg(hh)');
     ylabel('lg(Error)');
