@@ -50,7 +50,7 @@ for n_el = 2:2:16 % generate different mesh
             x_l = 0.0;
             dx_dxi = 0.0;
             for aa = 1 : 2
-                u_h = u_h + exact(x_ele(aa)) * PolyShape(aa, xi(aa), 0);
+                u_h = u_h + exact(x_ele(aa)) * PolyShape(aa, xi(l), 0); 
                 x_l = x_l + x_ele(aa) * PolyShape(aa, xi(l), 0);
                 dx_dxi = dx_dxi + x_ele(aa) * PolyShape(aa, xi(l), 1);
             end
@@ -64,10 +64,10 @@ for n_el = 2:2:16 % generate different mesh
     Error_Final_L2 = Error_L2^0.5 / result_L2_down;
     %Store the results into the table and plot them
     resultTable_L2 = [resultTable_L2; table(hh, Error_Final_L2)];
-    plot(log10(resultTable_L2.hh),log10(resultTable_L2.Error_Final_L2),'o-');
+    plot(log(resultTable_L2.hh),log(resultTable_L2.Error_Final_L2),'o-')
     hold on
-    xlabel('lg(hh)');
-    ylabel('lg(Error L2)');
+    xlabel('log(hh)');
+    ylabel('log(Error L2)');
     title('Plot of Error L2 vs. Mesh Size');
 
 end
