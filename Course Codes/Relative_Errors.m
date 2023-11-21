@@ -7,8 +7,8 @@ exact_square = @(x) sin(x).^2;
 exact_dx = @(x) cos(x);
 exact_dx_square = @(x) cos(x).^2;
 % integral the exact solution and its derivitive
-result_L2_down = sqrt(integral(exact_square, 0, 1)); %分母部分
-result_H1_down = sqrt(integral(exact_dx_square, 0, 1)); %分母部分
+Error_L2_down = sqrt(integral(exact_square, 0, 1)); % L2分母部分
+Error_H1_down = sqrt(integral(exact_dx_square, 0, 1)); % H1分母部分
 
 % creat two tables to store the results
 resultTable_L2 = table();
@@ -56,12 +56,15 @@ for n_el = 2:2:16 % generate different mesh
             end
             u_exact = exact(x_l);
             AA = AA + weight(l) * (u_h - u_exact)^2 * dx_dxi;
+            % Error_L2 = Error_L2 + weight(l) * (u_h - u_exact)^2 * dx_dxi;
+            % We can obtain the same results with the above equation only.
+            % AA is just here for helping understanding the loop.
         end
         
         Error_L2 = Error_L2 + AA;
     end
     
-    Error_Final_L2 = Error_L2^0.5 / result_L2_down;
+    Error_Final_L2 = Error_L2^0.5 / Error_L2_down;
     %Store the results into the table and plot them
     resultTable_L2 = [resultTable_L2; table(hh, Error_Final_L2)];
     plot(log(resultTable_L2.hh),log(resultTable_L2.Error_Final_L2),'o-')
@@ -69,7 +72,6 @@ for n_el = 2:2:16 % generate different mesh
     xlabel('log(hh)');
     ylabel('log(Error L2)');
     title('Plot of Error L2 vs. Mesh Size');
-
 end
 
 
