@@ -17,7 +17,7 @@ elseif a == 3
     if der == 0
         val = 0.5 * (1+xi) * xi;
     elseif der == 1
-        val = 0.5 * (2 * xi+1);
+        val = 0.5 * (2*);
     else
     end
 end
