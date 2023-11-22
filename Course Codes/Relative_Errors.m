@@ -122,16 +122,21 @@ d = [uh; g];
             u_h_dx = 0.0;
             x_l = 0.0;
             dx_dxi = 0.0;
+            
+            for aa = 1 : 2
+                dx_dxi = dx_dxi + x_ele(aa) * PolyShape(aa, xi(l), 1);
+            end
+            
             for aa = 1 : 2
                 u_h = u_h + exact(x_ele(aa)) * PolyShape(aa, xi(l), 0); 
                 %u_h = u_h + d(IEN(aa,ee)) * PolyShape(aa, xi(l), 0); 
                 %in the above equation, "exact(x_ele(aa))" is equal to
                 %"d(IEN(aa,ee))" since nodally exact property.
+                
+                u_h_dx = u_h_dx + exact(x_ele(aa)) * PolyShape(aa, xi(l), 1) / dx_dxi;
       
                 x_l = x_l + x_ele(aa) * PolyShape(aa, xi(l), 0);
-                dx_dxi = dx_dxi + x_ele(aa) * PolyShape(aa, xi(l), 1);
-                
-                u_h_dx = u_h_dx + exact(x_ele(aa)) * PolyShape(aa, xi(l), 1) / dx_dxi; 
+                 
             end
             u_exact = exact(x_l);
             AA = AA + weight(l) * (u_h - u_exact)^2 * dx_dxi;
