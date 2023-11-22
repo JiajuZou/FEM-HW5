@@ -99,6 +99,7 @@ d = [uh; g];
 
 % eof
 
+%% Bonus
 %Define the parameters of gmres
 restart = 10000;
 maxit = 10000;
