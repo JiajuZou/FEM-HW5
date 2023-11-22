@@ -44,67 +44,67 @@ for n_el = 2:2:16 % generate different mesh
     [xi, weight] = Gauss(n_int, -1, 1);
     
     
-%    %% Assembly of K and F and solve Kd=F
-%     K = zeros(n_eq,n_eq);
-%     F = zeros(n_eq,1);
-%     
-%     for ee = 1 : n_el
-% 
-%         k_e = zeros(2,2); %2*2 k matrix
-%         f_e = zeros(2,1);
-% 
-%         x_ele = zeros(2,1);
-%         for aa = 1 : 2
-%             x_ele(aa) = x_coor(IEN(aa,ee)); % A = IEN(a,e)
-%         end
-% 
-%     for l = 1 : n_int
-%         dx_dxi = 0.0;
-%         x_l = 0.0;
-%         for aa = 1 : 2
-%             dx_dxi = dx_dxi + x_ele(aa) * PolyShape(aa, xi(l), 1);
-%             x_l = x_l + x_ele(aa) * PolyShape(aa, xi(l), 0);
-%         end
-%         dxi_dx = 1.0 / dx_dxi;
-% 
-%         for aa = 1 : 2
-%             for bb = 1 : 2
-%                 k_e(aa,bb) = k_e(aa,bb) + weight(l) * PolyShape(aa, xi(l), 1) * PolyShape(bb, xi(l), 1) * dxi_dx;
-%             end
-%         end
-% 
-%         for aa = 1 : 2
-%             f_e(aa) = f_e(aa) + weight(l) * PolyShape(aa, xi(l), 0) * f(x_l) * dx_dxi;
-%         end
-% 
-%     end
-% 
-%     % Now we need to put element k and f into global K and F
-%     for aa = 1 : 2
-%         AA = IEN(aa,ee);
-%         PP = ID(AA);
-%         if PP > 0
-%             F(PP) = F(PP) + f_e(aa);
-%             for bb = 1 : 2
-%                 BB = IEN(bb,ee);
-%                 QQ = ID(BB);
-%                 if QQ > 0
-%                     K(PP,QQ) = K(PP,QQ) + k_e(aa,bb);
-%                 else
-%                     F(PP) = F(PP) - k_e(aa,bb) * g;
-%                 end
-%             end
-%         end
-%     end
-% 
-%         if ee == 1
-%         F(ID(IEN(1,ee))) = F(ID(IEN(1,ee))) + h;
-%         end
-%     end
-% % Now we have K and F
-% % Solve Kd = F
-% uh = K \ F;
-% d = [uh; g];
+   %% Assembly of K and F and solve Kd=F
+    K = zeros(n_eq,n_eq);
+    F = zeros(n_eq,1);
+    
+    for ee = 1 : n_el
+
+        k_e = zeros(2,2); %2*2 k matrix
+        f_e = zeros(2,1);
+
+        x_ele = zeros(2,1);
+        for aa = 1 : 2
+            x_ele(aa) = x_coor(IEN(aa,ee)); % A = IEN(a,e)
+        end
+
+    for l = 1 : n_int
+        dx_dxi = 0.0;
+        x_l = 0.0;
+        for aa = 1 : 2
+            dx_dxi = dx_dxi + x_ele(aa) * PolyShape(aa, xi(l), 1);
+            x_l = x_l + x_ele(aa) * PolyShape(aa, xi(l), 0);
+        end
+        dxi_dx = 1.0 / dx_dxi;
+
+        for aa = 1 : 2
+            for bb = 1 : 2
+                k_e(aa,bb) = k_e(aa,bb) + weight(l) * PolyShape(aa, xi(l), 1) * PolyShape(bb, xi(l), 1) * dxi_dx;
+            end
+        end
+
+        for aa = 1 : 2
+            f_e(aa) = f_e(aa) + weight(l) * PolyShape(aa, xi(l), 0) * f(x_l) * dx_dxi;
+        end
+
+    end
+
+    % Now we need to put element k and f into global K and F
+    for aa = 1 : 2
+        AA = IEN(aa,ee);
+        PP = ID(AA);
+        if PP > 0
+            F(PP) = F(PP) + f_e(aa);
+            for bb = 1 : 2
+                BB = IEN(bb,ee);
+                QQ = ID(BB);
+                if QQ > 0
+                    K(PP,QQ) = K(PP,QQ) + k_e(aa,bb);
+                else
+                    F(PP) = F(PP) - k_e(aa,bb) * g;
+                end
+            end
+        end
+    end
+
+        if ee == 1
+        F(ID(IEN(1,ee))) = F(ID(IEN(1,ee))) + h;
+        end
+    end
+% Now we have K and F
+% Solve Kd = F
+uh = K \ F;
+d = [uh; g];
 
 
     %% Calculate the Error L2 and H1
@@ -130,10 +130,9 @@ for n_el = 2:2:16 % generate different mesh
             end
             
             for aa = 1 : 3
-                u_h = u_h + exact(x_ele(aa)) * PolyShape(aa, xi(l), 0); 
-                %u_h = u_h + d(IEN(aa,ee)) * PolyShape(aa, xi(l), 0); 
-                %in the above equation, "exact(x_ele(aa))" is equal to
-                %"d(IEN(aa,ee))" since nodally exact property.
+%                 u_h = u_h + exact(x_ele(aa)) * PolyShape(aa, xi(l), 0); 
+                u_h = u_h + d(IEN(aa,ee)) * PolyShape(aa, xi(l), 0); 
+                
                 
                 u_h_dx = u_h_dx + exact(x_ele(aa)) * PolyShape(aa, xi(l), 1) / dx_dxi;
       
