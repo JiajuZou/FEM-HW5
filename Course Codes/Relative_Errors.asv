@@ -126,11 +126,11 @@ d = [uh; g];
             x_l = 0.0;
             dx_dxi = 0.0;
             
-            for aa = 1 : 4
+            for aa = 1 : 3
                 dx_dxi = dx_dxi + x_ele(aa) * PolyShape(aa, xi(l), 1);
             end
             
-            for aa = 1 : 4
+            for aa = 1 : 3
 %                 u_h = u_h + exact(x_ele(aa)) * PolyShape(aa, xi(l), 0); 
                 u_h = u_h + d(IEN(aa,ee)) * PolyShape(aa, xi(l), 0); 
                 
@@ -169,14 +169,14 @@ end
     hold on
     xlabel('log(hh)');
     ylabel('log(Error L2)');
-    title('Plot of Error L2 vs. Mesh Size - Cubic');
+    title('Plot of Error L2 vs. Mesh Size - Quadratic');
     
     figure
     plot(log(resultTable_H1.hh),log(resultTable_H1.Error_Final_H1),'o-')
     hold on
     xlabel('log(hh)');
     ylabel('log(Error H1)');
-    title('Plot of Error H1 vs. Mesh Size - Cubic');
+    title('Plot of Error H1 vs. Mesh Size - Quadratic');
 
 
 
