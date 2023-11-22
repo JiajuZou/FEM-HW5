@@ -107,6 +107,7 @@ d = [uh; g];
 
     %% Calculate the Error L2 and H1
     Error_L2 = 0.0;
+    Error_H1 = 0.0;
     for ee = 1 : n_el
         
         x_ele = zeros(2,1); % one element with two points
@@ -115,8 +116,10 @@ d = [uh; g];
         end
        
         AA = 0.0; 
+        BB = 0.0;
         for l = 1 : n_int
             u_h = 0.0;
+            u_h_dx = 0.0;
             x_l = 0.0;
             dx_dxi = 0.0;
             for aa = 1 : 2
@@ -124,28 +127,49 @@ d = [uh; g];
                 %u_h = u_h + d(IEN(aa,ee)) * PolyShape(aa, xi(l), 0); 
                 %in the above equation, "exact(x_ele(aa))" is equal to
                 %"d(IEN(aa,ee))" since nodally exact property.
-                  x_l = x_l + x_ele(aa) * PolyShape(aa, xi(l), 0);
+      
+                x_l = x_l + x_ele(aa) * PolyShape(aa, xi(l), 0);
                 dx_dxi = dx_dxi + x_ele(aa) * PolyShape(aa, xi(l), 1);
+                
+                u_h_dx = u_h_dx + exact(x_ele(aa)) * PolyShape(aa, xi(l), 1) / dx_dxi; 
             end
             u_exact = exact(x_l);
             AA = AA + weight(l) * (u_h - u_exact)^2 * dx_dxi;
             % Error_L2 = Error_L2 + weight(l) * (u_h - u_exact)^2 * dx_dxi;
             % We can obtain the same results with the above equation only.
             % AA is just here for helping understanding the loop.
+            
+            u_exact_dx = exact_dx(x_l);
+            BB = BB + weight(l) * (u_h_dx - u_exact_dx)^2 * dx_dxi;
+            
         end
         
         Error_L2 = Error_L2 + AA;
+        Error_H1 = Error_H1 + BB;
     end
     
     Error_Final_L2 = Error_L2^0.5 / Error_L2_down;
-    %Store the results into the table and plot them
+    Error_Final_H1 = Error_H1^0.5 / Error_H1_down;
+    %Store the results into the table
     resultTable_L2 = [resultTable_L2; table(hh, Error_Final_L2)];
+    resultTable_H1 = [resultTable_H1; table(hh, Error_Final_H1)];
+    
+end
+
+    %Plot Error L2 and H1
+    figure
     plot(log(resultTable_L2.hh),log(resultTable_L2.Error_Final_L2),'o-')
     hold on
     xlabel('log(hh)');
     ylabel('log(Error L2)');
     title('Plot of Error L2 vs. Mesh Size');
-end
+    
+    figure
+    plot(log(resultTable_H1.hh),log(resultTable_H1.Error_Final_H1),'o-')
+    hold on
+    xlabel('log(hh)');
+    ylabel('log(Error H1)');
+    title('Plot of Error H1 vs. Mesh Size');
 
 
 
