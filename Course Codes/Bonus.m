@@ -119,6 +119,9 @@ for i = 1:length(tol_values)
     Comparasion{i}= x-uh;
 end
 
+Differrence = Comparasion{2}-Comparasion{1};
+Differrence2 = Comparasion{3}-Comparasion{2};
+%Both of them are zero
 
 
 
