@@ -19,6 +19,7 @@ Error_H1_down = sqrt(integral(exact_dx_square, 0, 1)); % H1分母部分
 resultTable_L2 = table();
 resultTable_H1 = table();
 
+
 for n_el = 2:2:16 % generate different mesh
     hh = 1 / n_el;
     x_coor = 0 : hh : 1;
