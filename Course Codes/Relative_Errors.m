@@ -169,14 +169,14 @@ end
     hold on
     xlabel('log(hh)');
     ylabel('log(Error L2)');
-    title('Plot of Error L2 vs. Mesh Size');
+    title('Plot of Error L2 vs. Mesh Size - Quadratic');
     
     figure
     plot(log(resultTable_H1.hh),log(resultTable_H1.Error_Final_H1),'o-')
     hold on
     xlabel('log(hh)');
     ylabel('log(Error H1)');
-    title('Plot of Error H1 vs. Mesh Size');
+    title('Plot of Error H1 vs. Mesh Size - Quadratic');
 
 
 
