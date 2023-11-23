@@ -111,7 +111,6 @@ tol_values = [1e-2, 1e-4, 1e-6];
 solutions_gmres = cell(length(tol_values), 1);
 Comparasion = cell(length(tol_values), 1);
 
-
 % Solve the linear system using gmres with different tols
 for i = 1:length(tol_values)
     tol = tol_values(i);

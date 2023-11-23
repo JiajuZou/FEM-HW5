@@ -39,6 +39,7 @@ solutions = cell(n_quad, 1);
     % generate the quadrature rule to caculate the integral of one element
     
     for n_int = 1:1:n_quad
+
         [xi, weight] = Gauss(n_int, -1, 1);
     
         % Assembly of K and F and solve Kd=F
