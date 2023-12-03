@@ -30,7 +30,7 @@ ID(end) = 0;
 n_eq = n_pt - 1; % number of equations
 
 % generate the quadrature rule
-n_int = 2;
+n_int = 3;
 [xi, weight] = Gauss(n_int, -1, 1);
 
 K = zeros(n_eq, n_eq); % allocate the global stiffness matrix
@@ -95,9 +95,6 @@ end
 % Solve Kd = F
 uh = K \ F;
 
-d = [uh; g];
-
-
 %% Bonus
 %Define the parameters of gmres
 restart = 10000;
@@ -106,21 +103,14 @@ maxit = 10000;
 % Set the value of tol
 tol_values = [1e-2, 1e-4, 1e-6];
 
-% Create array to store the solutions
-solutions_gmres = cell(length(tol_values), 1);
-Comparasion = cell(length(tol_values), 1);
+uh1 = gmres(K,F,restart,tol_values(1),maxit);
+uh2 = gmres(K,F,restart,tol_values(2),maxit);
+uh3 = gmres(K,F,restart,tol_values(3),maxit);
+%计算偏差
 
-% Solve the linear system using gmres with different tols
-for i = 1:length(tol_values)
-    tol = tol_values(i);
-    x = gmres(K, F, restart, tol, maxit);
-    solutions_gmres{i} = x;
-    Comparasion{i}= x-uh;
-end
 
-Differrence = Comparasion{2}-Comparasion{1};
-Differrence2 = Comparasion{3}-Comparasion{2};
-%Both of them are zero
+
+
 
 
 
