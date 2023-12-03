@@ -10,7 +10,6 @@ h = -cos(0);
 exact = @(x) sin(x);
 exact_dx = @(x) cos(x);
 
-
 %solutions with different quadrature points
 n_quad = 6;
 solutions = cell(n_quad, 1);
@@ -102,7 +101,6 @@ solutions = cell(n_quad, 1);
     % Now we have K and F
     % Solve Kd = F
     uh = K \ F;
-    
     
     d = [uh; g];
     
